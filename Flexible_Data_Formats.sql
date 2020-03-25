@@ -1,4 +1,4 @@
-Flexible Data Formats
+-- Flexible Data Formats
 
 -- Exercise 1:
 -- Goal: Write a query to format the view_item event into a table with the appropriate columns
