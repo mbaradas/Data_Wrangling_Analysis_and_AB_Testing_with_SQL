@@ -85,33 +85,46 @@ GROUP BY date(event_time);
 -- FROM dsv1069.events_ex2
 -- GROUP BY DATE(event_time);
 
+-- SELECT DATE(event_time) AS date,
+--   event_name,
+--   COUNT(*)
+-- FROM dsv1069.events_ex2
+-- GROUP BY DATE(event_time),
+--   event_name;
+  
 SELECT DATE(event_time) AS date,
-  event_name,
+  platform,
   COUNT(*)
 FROM dsv1069.events_ex2
 GROUP BY DATE(event_time),
-  event_name;
+  platform;
   
--- Exercise 3: Imagine that you need to count item views by day. 
--- You found this table item_views_by_category_temp - should you use
--- it to answer your questiuon?
-
+  
+-- Exercise 3: Imagine that you need to count item views by day. You found this table
+-- item_views_by_category_temp - should you use it to answer your questiuon?
 
 -- get columns
-SELECT *
-FROM dsv1069.item_views_by_category_temp
+-- SELECT *
+-- FROM dsv1069.item_views_by_category_temp
 -- category
 -- users
 -- view_events
+
+-- SELECT SUM(view_events) AS event_count
+-- FROM dsv1069.item_views_by_category_temp;
+
+SELECT COUNT(DISTINCT event_id) AS event_count
+FROM dsv1069.events
+WHERE event_name = 'view_item';
 
 -- Exercise 4: 
 -- Using any methods you like, decide if this table is ready to be 
 -- used as a source of truth.
 
+
 -- get columns
-SELECT *
-FROM dsv1069.events
-LIMIT 100;
+-- SELECT *
+-- FROM dsv1069.events;
 -- event_id
 -- event_time
 -- user_id
@@ -120,10 +133,26 @@ LIMIT 100;
 -- parameter_name
 -- parameter_value
 
--- Exercise 5: 
--- Is this the right way to join orders to users? 
--- Is this the right way this join.
+-- SELECT DATE(event_time) AS date,
+--   COUNT(*) AS row_count,
+--   COUNT(event_id) AS event_count,
+--   COUNT(user_id) AS user_count
+-- FROM dsv1069.events
+-- GROUP BY date;
+  
+SELECT DATE(event_time) AS date,
+  platform,
+  COUNT(user_id) AS users
+  
+FROM dsv1069.events
 
+GROUP BY date,
+  platform;
+
+
+
+-- Exercise 5: 
+-- Is this the right way to join orders to users? Is this the right way this join.
 
 -- get columns
 -- SELECT *
@@ -152,15 +181,7 @@ LIMIT 100;
 -- merged_at
 -- parent_user_id
 
-SELECT *
-FROM dsv1069.users
-  JOIN dsv1069.orders
-  ON users.parent_user_id = orders.user_id;
-
-
-
-
-
-
-
-
+SELECT COUNT(*)
+FROM dsv1069.orders
+  JOIN dsv1069.users
+  ON orders.user_id = COALESCE(users.parent_user_id, user_id)
