@@ -38,4 +38,4 @@ FROM
             assignments.test_id,
             assignments.test_assignment) user_level
 WHERE test_id = 7
-GROUP BY test_assignment
+GROUP BY test_assignment;
